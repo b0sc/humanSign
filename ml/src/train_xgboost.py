@@ -129,24 +129,30 @@ def main():
             'subject': [f'human_{i}' for i in range(n_samples)],
             'session': [1] * n_samples,
             'is_human': [True] * n_samples,
-            'dwell_avg': np.random.normal(100, 30, n_samples),  # ~100ms avg hold
-            'flight_avg': np.random.normal(80, 40, n_samples),   # ~80ms avg flight
             'total_keystrokes': np.random.randint(50, 500, n_samples),
             'duration_ms': np.random.uniform(5000, 60000, n_samples),
             'error_rate': np.random.beta(2, 20, n_samples),
         }
         
+        # Add multiple timing columns to mimic raw data for feature extraction
+        for k in range(10):
+            human_data[f'dwell_{k}'] = np.random.normal(100, 30, n_samples)
+            human_data[f'flight_{k}'] = np.random.normal(80, 40, n_samples)
+
         # Simulate bot typing patterns (more uniform)
         bot_data = {
             'subject': [f'bot_{i}' for i in range(n_samples)],
             'session': [1] * n_samples,
             'is_human': [False] * n_samples,
-            'dwell_avg': np.random.normal(90, 5, n_samples),   # Very uniform
-            'flight_avg': np.random.normal(75, 5, n_samples),   # Very uniform  
             'total_keystrokes': np.random.randint(50, 500, n_samples),
             'duration_ms': np.random.uniform(5000, 60000, n_samples),
-            'error_rate': np.random.beta(1, 50, n_samples),  # Fewer errors
+            'error_rate': np.random.beta(1, 50, n_samples),
         }
+        
+        # Add multiple timing columns for bots
+        for k in range(10):
+            bot_data[f'dwell_{k}'] = np.random.normal(90, 5, n_samples)
+            bot_data[f'flight_{k}'] = np.random.normal(75, 5, n_samples)
         
         import pandas as pd
         human_df = pd.DataFrame(human_data)

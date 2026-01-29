@@ -138,6 +138,9 @@ def split_data(
     Ensures subjects don't appear in multiple sets.
     """
     subjects = df['subject'].unique()
+    # Ensure it's a standard numpy array, not a pandas StringArray
+    if hasattr(subjects, 'to_numpy'):
+        subjects = subjects.to_numpy()
     np.random.seed(random_state)
     np.random.shuffle(subjects)
     
