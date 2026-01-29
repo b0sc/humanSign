@@ -8,7 +8,7 @@ class Settings(BaseSettings):
     """Application settings loaded from environment."""
     
     # Database
-    database_url: str = "postgresql://postgres:postgres@localhost:5432/humansign"
+    database_url: str = "postgres://postgres:postgres@localhost:5432/humansign"
     database_pool_size: int = 10
     
     # Server

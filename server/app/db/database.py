@@ -15,11 +15,17 @@ _pool: asyncpg.Pool | None = None
 async def init_db() -> None:
     """Initialize database connection pool."""
     global _pool
-    _pool = await asyncpg.create_pool(
-        settings.database_url,
-        min_size=2,
-        max_size=settings.database_pool_size,
-    )
+    try:
+        _pool = await asyncpg.create_pool(
+            settings.database_url,
+            min_size=2,
+            max_size=settings.database_pool_size,
+        )
+        print("✓ Database connection pool initialized")
+    except Exception as e:
+        print(f"⚠ Database connection failed: {e}")
+        print("  Server running in degraded mode (no database)")
+        _pool = None
 
 
 async def close_db() -> None:
@@ -33,7 +39,7 @@ async def close_db() -> None:
 def get_pool() -> asyncpg.Pool:
     """Get the database connection pool."""
     if _pool is None:
-        raise RuntimeError("Database pool not initialized")
+        raise RuntimeError("Database not available. Start PostgreSQL: docker-compose up -d postgres")
     return _pool
 
 
